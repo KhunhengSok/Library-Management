@@ -1,9 +1,7 @@
 package Model ;
 
-import java.sql.Date;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 class History{
     private User user; 
@@ -11,10 +9,19 @@ class History{
     private Date dueDate ; 
     private Boolean isReturned ; 
 //    private Map<Book, Boolean> book_returnStatus ;
-    private HistoryDetail[] histories ;
+    private List<HistoryDetail> histories ;
+
+    public static int DUE_PERIOD =  7;
 
     History(User user){
-        
+        long milli = java.lang.System.currentTimeMillis();
+        long dueMilli = milli + TimeUnit.DAYS.toMillis(DUE_PERIOD);
+
+        this.borrowDate = new Date(milli);
+        this.dueDate = new Date(dueMilli);
+        this.isReturned = false ;
+        this.user = user;
+        this.histories = new ArrayList<>();
     }
 
     public User getUser() {

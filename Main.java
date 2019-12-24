@@ -4,9 +4,6 @@ public class Main{
     private static Scanner scanner  ;
 
     public static void main(String args[]){
-        Map<String,Integer> map = new HashMap<>();
-        int i =   map.get("hi");
-        print(i);
         System.out.println("hello world");
         scanner = new Scanner(System.in);
 

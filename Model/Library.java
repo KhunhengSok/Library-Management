@@ -11,14 +11,15 @@ public class Library{
 //    private List<Book> books ;
     private Map<Book, Integer> books_qty;
     private History borrowHistory;
-
+    private WaitingList waitingList;
 
     private static Library library = null;
     private Library(){
         this.users = new ArrayList<>();
         this.books_qty = new HashMap<>();
         this.admins = new ArrayList<>();
-//        this.borrowHistory = new History();
+        this.borrowHistory = new History();
+        this.waitingList = WaitingList.getInstance();
     }
 
 
@@ -32,9 +33,12 @@ public class Library{
 
     public void insertBook(Admin admin, Book book, int qty){
         Integer currentQty = this.books_qty.get(book);
-        if(currentQty != null){
+        if(currentQty == null){
             this.books_qty.put(book,qty);
+        }else{
+            this.books_qty.put(book, currentQty + qty);
         }
+
     }
 
     public boolean removeBook(Book book, int qty){
@@ -47,5 +51,23 @@ public class Library{
         return true ;
     }
 
+    public Book searchBook(String title){
+        for(Book b: this.books_qty.keySet()){
+            if(b.getTitle().equals(title)){
+                return b ;
+            }
+        }
+        return null;
+    }
+
+    public boolean isBookAvailable(Book book){
+        Integer currentQty = this.books_qty.get(book);
+        if(currentQty == null || currentQty == 0){
+            return  false;
+        }else if (currentQty >=1 ){
+            return true;
+        }
+        return false ;
+    }
 
 }
