@@ -165,10 +165,13 @@ public class Library{
                 books.add(b);
             }
         }
+        if(books.size() == 0 ) return new Book[]{};
+        else{
+            Book[] temp = new Book[this.books.size()];
+            temp = books.toArray(temp);
+            return temp;
+        }
 
-        Book[] temp = new Book[this.books.size()];
-        temp = this.books.toArray(temp);
-        return temp;
     }
 
     public void removeBookRequest(String id){
@@ -258,7 +261,10 @@ public class Library{
         }
         System.out.println("\t\t\t\t\tBorrowing List:");
         for(Book book: borrowingList){
-            System.out.println(book.getTitle() + " : " + book.getBorrower());
+            System.out.println("Book: " + book.getTitle());
+            System.out.println("Borrower: " + book.getBorrower());
+            System.out.println("Borrowed Date: " + book.getBookId());
+            System.out.println("Due Date: " + book.getDueDate() +'\n');
         }
     }
 
@@ -271,6 +277,7 @@ public class Library{
 
     public void borrowBook(User borrower, Book... books){
         ArrayList<History.HistoryDetail> historyDetails = new ArrayList<>();
+        if(books == null) return ;
         for(Book b:books) {
             b.loan(borrower);
             historyDetails.add(new History.HistoryDetail(b));

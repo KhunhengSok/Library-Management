@@ -5,7 +5,7 @@ import java.util.* ;
 public class Main{
     private static Scanner scanner  ;
     private static Library library ;
-    private static Person currentLogin = new User("Khunheng", "Sok");
+    private static Person currentLogin ;
 
     /*
         ******Screen Naming Convention
@@ -13,15 +13,6 @@ public class Main{
         * Admin and User : role
         * functionality : functionality
      */
-    public static void main1(String args[]){
-        scanner = new Scanner(System.in);
-        library =  Library.getInstance() ;
-        library.viewAllBook();
-        library.viewBorrowingList();
-        library.addToWaitingList((User)currentLogin, "My Book");
-        library.getWaitingList().viewWaitingList();
-        return ;
-    }
 
     public static void main(String args[]){
         scanner = new Scanner(System.in);
@@ -132,6 +123,7 @@ public class Main{
     }
 
     private static void admin(){
+        currentLogin = new Admin("Khunheng", "Sok");
         boolean flag = true;
         while (flag){
             printAdminFunctionalityPrompt();
@@ -144,23 +136,24 @@ public class Main{
                 case "5": viewWaitingList();break;
                 case "6": viewBorrowingList();break;
                 case "7":  flag = false ; break;
-                default: println("Invalid input");  break;
+                default: println("Invalid input");  currentLogin = null; break;
             }
         }
     }
 
     private static void user(){
+        currentLogin = new User("Khunheng", "Sok");
         boolean flag = true;
         while(flag){
             printUserFunctionalityPrompt();
             String input = handleInput();
             switch (input){
-                case "1": break;
-                case "2": break;
-                case "3": break;
-                case "4": break;
+                case "1": borrowBooksWithPrompt();break;
+                case "2": searchBookWithPrompt();break;
+                case "3": viewHistory();break;
+                case "4": viewAllBooks();break;
                 case "5": flag = false ;break;
-                default: println("Invalid input");  break;
+                default: println("Invalid input"); currentLogin = null;  break;
 
             }
         }
@@ -172,14 +165,14 @@ public class Main{
 
     //=========Admin===========
     private static void insertBookWithPrompt(){
-        print("Enter a book title");
+        print("Enter a book title: ");
         String title = scanner.nextLine();
         Book book = new Book(title);
         library.insertBook((Admin)currentLogin, book);
     }
 
     private static void removeBookWithPrompt(){
-        print("Enter a book id");
+        print("Enter a book id: ");
         String id = scanner.nextLine();
         library.removeBookByBookID(id);
     }
@@ -205,11 +198,39 @@ public class Main{
 
     //=========User===========
     private static  void borrowBooksWithPrompt(){
-        println("Enter a title");
+        println("Enter a Book ID: ");
+        String id = scanner.nextLine();
+        Book book = library.getBookInstance(id);
+        if(book != null) library.borrowBook((User) currentLogin, book);
     }
 
+    private static void searchBookWithPrompt(){
+        print("Enter a title: ");
+        String title = scanner.nextLine();
+        Book[] books = library.searchBook(title);
+        if(books.length==0){
+            println("\"" + title + "\"" + " is not available in our library.");
+        }else {
+            printBooks(books);
+        }
+    }
+
+    private static void viewHistory(){
+        library.viewHistory((User)currentLogin);
+    }
+
+    //======================End functionality===================
 
 
+
+
+
+
+    private static void printBooks(Book[] books){
+        for(Book b: books){
+            println(b.toString());
+        }
+    }
 
 
     //=============================Prompt=================================
@@ -226,7 +247,7 @@ public class Main{
         System.out.println("2. User");
     }
     private static void printAdminFunctionalityPrompt(){
-        println("Please enter a number: ");
+        println("\nPlease enter a number: ");
         println("1. Insert Book");
         println("2. Remove Book");
         println("3. Remove user's request in the waiting list");
@@ -237,6 +258,7 @@ public class Main{
     }
 
     private static void printUserFunctionalityPrompt(){
+        println("\nPlease enter a number: ");
         println("1. Borrow books");
         println("2. Search for a book");
         println("3. View history");

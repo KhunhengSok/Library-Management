@@ -134,7 +134,7 @@ class History{
 
         @Override
         public String toString() {
-            return  this.getBook().getTitle() + " : " + (this.getReturnedStatus() ? " Returned.\n" : " Not yet return.\n");
+            return  "- " + this.getBook().getTitle() + " : " + (this.getReturnedStatus() ? " Returned.\n" : " Not yet return.\n");
 
         }
     }
