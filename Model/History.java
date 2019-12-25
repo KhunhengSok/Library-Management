@@ -88,31 +88,33 @@ class History{
         }
     }
 
+
     @Override
     public String toString() {
         String str = "User: " + this.user + "\n" + "Borrow History: \n" ;
         for(HistoryDetail detail: this.histories){
-            str += "\t" + detail.getBook() + " : " + detail.getAmount() + "pcs " + (detail.getReturnedStatus() ? " Returned." : " Not yet return.");
+//            str += "\t" + detail.getBook() + " : " + (detail.getReturnedStatus() ? " Returned." : " Not yet return.");
+            str += detail;
         }
         return str;
     }
 
+
+    //===================================================
+
     public static class HistoryDetail{
         private Book book ;
-        private int Qty;
         private boolean isRetuned ;
 
-        HistoryDetail(Book book, int Qty, boolean returnedStatus){
+        HistoryDetail(Book book, boolean returnedStatus){
             this.book = book ;
-            this.Qty = Qty;
             this.isRetuned = returnedStatus;
         }
 
-        HistoryDetail(Book book, int Qty){
-            this(book, Qty, false);
+        HistoryDetail(Book book){
+            this(book, false);
         }
 
-        public int getAmount(){return this.Qty;}
 
         public boolean getReturnedStatus(){
             return this.isRetuned;
@@ -130,5 +132,12 @@ class History{
             this.book = book;
         }
 
+        @Override
+        public String toString() {
+            return  this.getBook().getTitle() + " : " + (this.getReturnedStatus() ? " Returned.\n" : " Not yet return.\n");
+
+        }
     }
+
+
 }

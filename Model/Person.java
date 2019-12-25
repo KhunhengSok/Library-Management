@@ -16,6 +16,9 @@ public abstract class Person {
 
     }
 
+    public String getName(){
+        return this.firstname + " " + this.getLastname();
+    }
 
     public String getEmail() {
         return email;
@@ -43,7 +46,7 @@ public abstract class Person {
 
     public  int checkBookAvailableStatus(String title){
         Library library = Library.getInstance();
-        return library.checkBookAvailableStatus(title);
+        return library.checkBookAvailableAmount(title);
     }
 
 }

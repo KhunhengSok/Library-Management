@@ -1,15 +1,18 @@
 package Model ;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class Library{
+    public static int BOOK_REQUEST_GRANTED = 1;
+    public static int BOOK_REQUEST_NOT_AVAILABLE = 2;
+    public static int BOOK_REQUEST_NOT_ENOUGH = 3 ;
+
     private List<User> users;
-    private List<User> admins;
-//    private List<Book> books ;
-//    private Map<Book, Integer> books_qty;
+    private List<Admin> admins;
     private ArrayList<Book> books;
     private List<History> borrowedHistory;
+
+
     private WaitingList waitingList;
 
     private static Library library = null;
@@ -43,6 +46,9 @@ public class Library{
 //        }
 //
 //    }
+    public WaitingList getWaitingList() {
+        return waitingList;
+    }
 
     public void insertBook(Admin admin, Book... books){
         for(Book b: books){
@@ -72,11 +78,42 @@ public class Library{
         return  false ;
     }
 
+    public void viewAllBook(){
+        for(Book b: this.books){
+            System.out.println(b);
+        }
+    }
+
+    public User getUserInstance(String id){
+        for(User u: this.users){
+            if(u.getId().equalsIgnoreCase(id)) return u;
+        }
+        return  null;
+    }
+
+    public User getUserInstance(String lastname, String firstname){
+        //assume all usernames are unique
+        for(User u: this.users){
+            if(u.getLastname().equalsIgnoreCase(lastname) && u.getFirstname().equalsIgnoreCase(firstname)) return u;
+        }
+        return  null;
+    }
+    public Admin getAdminInstance(String id){
+        for(Admin a: this.admins){
+            if(a.getId().equalsIgnoreCase(id)) return a ;
+        }
+        return null;
+    }
 
 
-    public Book getBookInstance(String title){
-//        for(Book b: this.b)
-        return new Book("");
+    public Book getBookInstance(String id){
+        //return Book instance if it exists else return null
+        for(Book b: books){
+            if(b.getBookId().equalsIgnoreCase(id)){
+                return b;
+            }
+        }
+        return null;
     }
 
 
@@ -88,6 +125,28 @@ public class Library{
 //        }
 //        return null;
 //    }
+
+    public void viewHistory(User user){
+        History[] history = getHistory(user);
+        if(history.length == 0){
+            System.out.println(user.getName() + " has no borrowed history.");
+        }else{
+            for(History h: history){
+                System.out.println(h);
+            }
+        }
+    }
+
+    private History[] getHistory(User user){
+        ArrayList<History> histories = new ArrayList<>();
+        for(History h: this.borrowedHistory){
+            if(h.getBorrower().getId().equalsIgnoreCase(user.getId())) {
+                histories.add(h);
+            }
+        }
+        History[] temp = new History[histories.size()];
+        return histories.toArray(temp);
+    }
 
     public Book[] searchBook(String title ){
         List<Book> books = new ArrayList<>();
@@ -137,12 +196,13 @@ public class Library{
         return IDs.toArray(ids);
     }
 
-    public int checkBookAvailableStatus(String title){
+    public int checkBookAvailableAmount(String title){
         //return -1 if the book doesn't exist
         //return 0 if it's not avaibl
         int currentQty = -1 ;
         for(Book b: this.books){
-            if(b.getTitle().equalsIgnoreCase(title)){
+            //check if the book title match and book isn't loan yet.
+            if(b.getTitle().equalsIgnoreCase(title) && !b.isLoan()   ){
                 if(currentQty == -1){
                     currentQty = 1 ;
                 }else {
@@ -153,4 +213,35 @@ public class Library{
         return currentQty;
     }
 
+//    public int[] borrowBook(String title, int Qty){
+//        //return array of int
+//        //1st: BOOK_REQUEST_STATUS (Check Constant at top)
+//        //2nd: availableAmount
+//        //3rd: requestAmount
+//        int availableAmount = this.checkBookAvailableAmount(title);
+//
+//        int[] returned = new int[3];
+//        returned[1] = availableAmount;
+//        returned[2] = Qty;
+//
+//        if(availableAmount >= Qty){
+//            returned[0] = BOOK_REQUEST_GRANTED;
+//        }else if(availableAmount < Qty ){
+//            returned[0] = BOOK_REQUEST_NOT_ENOUGH;
+//        }
+//        return returned;
+//    }
+
+    public void borrowBook(User borrower, Book... books){
+        ArrayList<History.HistoryDetail> historyDetails = new ArrayList<>();
+        for(Book b:books) {
+            b.loan(borrower);
+            historyDetails.add(new History.HistoryDetail(b));
+        }
+        addHistory(borrower, historyDetails);
+    }
+
+    private void addHistory(User borrower, ArrayList<History.HistoryDetail> details){
+        this.borrowedHistory.add(new History(borrower, details));
+    }
 }

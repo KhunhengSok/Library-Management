@@ -3,7 +3,7 @@ package Model ;
 public class User extends Person{
     private History borrowedHistory ;
 
-    User(String lastname, String firstname){
+    public User(String lastname, String firstname){
         super(lastname, firstname);
     }
 

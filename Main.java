@@ -1,41 +1,17 @@
-import Model.Book;
-import Model.Library;
+import Model.*;
 
 import java.util.* ;
 
 public class Main{
     private static Scanner scanner  ;
     private static Library library ;
+    private static Person currentLogin;
 
     public static void main(String args[]){
         scanner = new Scanner(System.in);
         library =  Library.getInstance() ;
 
-        library.insertBook(null, new Book( "My book"));
-        String bookTitle = scanner.nextLine();
-        while(!(bookTitle.isEmpty() || bookTitle.equals(""))){
-            library.insertBook(null, new Book(bookTitle));
-            bookTitle = scanner.nextLine();
-        }
-
-        Book[] books = library.getAllBook();
-        for(Book b: books){
-            print(b.toString());
-        }
-
-
-
-
-        //        while(true){
-//            String choice = menuPrompt();
-//            if (choice == "2"){
-//                break ;
-//            }else if (choice == "1"){
-//                operationPrompt();
-//            }else {
-//                System.out.println("Invalid Input");
-//            }
-//        };
+        library.getWaitingList().viewWaitingList();
         return ;
     }
 
@@ -70,6 +46,53 @@ public class Main{
 
     private static void print(String msg){
         System.out.println(msg);
+    }
+
+    private static User createUserWithPrompt(){
+        System.out.print("Enter a last name: ");
+        String lastname = scanner.nextLine();
+        System.out.print("Enter a first name: ");
+        String firstname = scanner.nextLine();
+
+        return new User(lastname, firstname);
+    }
+
+    private static Admin createAdminWithPrompt(){
+        System.out.print("Enter a last name");
+        String lastname = scanner.nextLine();
+        System.out.print("Enter a first name");
+        String firstname = scanner.nextLine();
+
+        return new Admin(lastname, firstname);
+    }
+
+    private static void bookSearchWithPrompt(){
+        System.out.print("Enter a book title: ");
+        String title = scanner.nextLine();
+        Book[] books = library.searchBook(title);
+        if(books.length == 0) return ;
+        for(Book b: books){
+            System.out.print(b);
+        }
+    }
+
+    private static void viewHistoryFromAdminWithPrompt(){
+        System.out.print("Enter a last name: ");
+        String lastname = scanner.nextLine();
+        System.out.print("Enter a first name: ");
+        String firstname = scanner.nextLine();
+
+        User user = library.getUserInstance(lastname, firstname);
+        if(user == null) {
+            System.out.println("User not found");
+        }else{
+            library.viewHistory(user);
+        }
+    }
+
+    private static void viewHistoryFromUser(){
+        User user = (User)currentLogin;
+        library.viewHistory(user);
     }
 }
 

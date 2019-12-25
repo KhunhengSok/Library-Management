@@ -5,17 +5,17 @@ import java.util.List;
 import java.util.Queue;
 
 public class BookRequest {
-    private Book book;
+    private String bookTitle;
     private Queue<User> waitingUsers ;
 //    private static List<BookRequest> bookRequests ;
 
-    public Book getBook() {
-        return book;
+    public String getBookTitle() {
+        return this.bookTitle;
     }
 
     //1 book request for 1 book type
-    public BookRequest(Book book){
-        this.book = book;
+    public BookRequest(String title){
+        this.bookTitle = title;
         this.waitingUsers = new LinkedList<>();
     }
 
@@ -27,8 +27,20 @@ public class BookRequest {
         return waitingUsers;
     }
 
+    @Override
+    public String toString() {
+        String str =  "Book title: " + this.bookTitle + "\n" ;
+        str += "Waiting Users: ";
+        if(this.waitingUsers.size() == 0) str += "None.\n" ;
+        else {
+            for(User u : this.waitingUsers) {
+                str += u.getName() + ", ";
+            }
+        }
+        return str;
+    }
 
-//    public static synchronized BookRequest getInstance(Book book ){
+    //    public static synchronized BookRequest getInstance(Book book ){
 //        for(BookRequest bookRequestrequest: bookRequests){
 //            if(bookRequestrequest.book.getBookId() == book.getBookId() ){
 //                return bookRequestrequest;
