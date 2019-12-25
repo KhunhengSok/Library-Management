@@ -1,5 +1,6 @@
 package Model ;
 
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -8,12 +9,11 @@ class History{
     private Date borrowDate ;
     private Date dueDate ; 
     private Boolean isReturned ; 
-//    private Map<Book, Boolean> book_returnStatus ;
     private List<HistoryDetail> histories ;
 
-    public static int DUE_PERIOD =  7;
+    public static int DUE_PERIOD =  7 ;
 
-    History(User user){
+    History(User user, ArrayList<HistoryDetail> historyDetails){
         long milli = java.lang.System.currentTimeMillis();
         long dueMilli = milli + TimeUnit.DAYS.toMillis(DUE_PERIOD);
 
@@ -22,18 +22,20 @@ class History{
         this.isReturned = false ;
         this.user = user;
         this.histories = new ArrayList<>();
+        this.histories.addAll(historyDetails);
     }
 
-    public User getUser() {
 
+    public User getBorrower() {
         return user;
     }
 
 
-    public void addBook(Book... book) {
-    
+    public HistoryDetail[] getHistoryDetails(){
+//        return (HistoryDetail[]) this.histories.toArray();
+        HistoryDetail[] historyDetail = new HistoryDetail[this.histories.size()];
+        return this.histories.toArray(historyDetail);
     }
-
 
     public Date getBorrowDate() {
         return borrowDate;
@@ -48,20 +50,6 @@ class History{
     }
 
 
-
-    
-//    public Book[] getBorrowedBook(){
-//        //Get Unreturned books if exist, else return empty list
-//        ArrayList<Book> borrowedBook = new ArrayList<>();
-//        Book[] books = (Book[])this.book_returnStatus.keySet().toArray();
-//        for(Book b : books){
-//            if(this.book_returnStatus.get(b) == false){
-//                borrowedBook.add(b);
-//            }
-//        }
-//        return (Book[])borrowedBook.toArray();
-//    }
-
     public Book[] getBorrowedBook(){
         ArrayList<Book> borrowedBook = new ArrayList<>();
         for(HistoryDetail d: histories){
@@ -69,10 +57,47 @@ class History{
                 borrowedBook.add(d.getBook());
             }
         }
-        return (Book[]) borrowedBook.toArray();
+//        return (Book[]) borrowedBook.toArray();
+        Book[] temp = new Book[borrowedBook.size()];
+        return borrowedBook.toArray(temp);
     }
 
-    public class HistoryDetail{
+    public static class Builder{
+        private User user ;
+        private ArrayList<HistoryDetail> historyDetails ;
+
+        Builder(){
+            this.historyDetails = new ArrayList<>();
+
+        }
+
+        public Builder setUser(User u){
+            this.user = u ;
+            return  this;
+        }
+
+        public Builder addHistoryDetail(HistoryDetail... details){
+            for(HistoryDetail detail: details){
+                this.historyDetails.add(detail);
+            }
+            return this ;
+        }
+
+        public History build(){
+            return new History(this.user, this.historyDetails);
+        }
+    }
+
+    @Override
+    public String toString() {
+        String str = "User: " + this.user + "\n" + "Borrow History: \n" ;
+        for(HistoryDetail detail: this.histories){
+            str += "\t" + detail.getBook() + " : " + detail.getAmount() + "pcs " + (detail.getReturnedStatus() ? " Returned." : " Not yet return.");
+        }
+        return str;
+    }
+
+    public static class HistoryDetail{
         private Book book ;
         private int Qty;
         private boolean isRetuned ;
@@ -82,6 +107,12 @@ class History{
             this.Qty = Qty;
             this.isRetuned = returnedStatus;
         }
+
+        HistoryDetail(Book book, int Qty){
+            this(book, Qty, false);
+        }
+
+        public int getAmount(){return this.Qty;}
 
         public boolean getReturnedStatus(){
             return this.isRetuned;

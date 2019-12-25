@@ -15,10 +15,6 @@ public class Admin extends Person {
         return new Book[0];
     }
 
-    @Override
-    public boolean isBookAvailable() {
-        return false;
-    }
 
     public void removeBook(Book book){
 

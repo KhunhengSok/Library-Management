@@ -41,6 +41,9 @@ public abstract class Person {
 
     public abstract  Book[] viewAllBook();
 
-    public abstract  boolean isBookAvailable();
+    public  int checkBookAvailableStatus(String title){
+        Library library = Library.getInstance();
+        return library.checkBookAvailableStatus(title);
+    }
 
 }

@@ -8,7 +8,7 @@ public class Book{
     private String author = "";
     private String bookId  ;
     
-    Book(String title ){
+    public Book(String title ){
         this.title = title;
         this.bookId = UUID.randomUUID().toString();
     }
@@ -35,5 +35,10 @@ public class Book{
 
     public void setID(String ID) {
         this.bookId = ID;
+    }
+
+    @Override
+    public String toString() {
+        return "Title: " + this.title + "\nAuthor: " + this.author + "\nBook ID: " + this.bookId;
     }
 }

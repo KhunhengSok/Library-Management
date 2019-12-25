@@ -19,10 +19,6 @@ public class User extends Person{
         return new Book[0];
     }
 
-    @Override
-    public boolean isBookAvailable() {
-        return false;
-    }
 
     public boolean borrowBook(){
         return true ;
