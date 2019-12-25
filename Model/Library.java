@@ -1,5 +1,6 @@
 package Model ;
 
+import javax.annotation.processing.SupportedSourceVersion;
 import java.util.*;
 
 public class Library{
@@ -11,7 +12,7 @@ public class Library{
     private List<Admin> admins;
     private ArrayList<Book> books;
     private List<History> borrowedHistory;
-
+    private List<Book> borrowingList ;
 
     private WaitingList waitingList;
 
@@ -23,6 +24,7 @@ public class Library{
         this.admins = new ArrayList<>();
         this.borrowedHistory = new ArrayList<>();
         this.waitingList = WaitingList.getInstance();
+        this.borrowingList = new ArrayList<>();
     }
 
 
@@ -79,9 +81,17 @@ public class Library{
     }
 
     public void viewAllBook(){
+        if(this.books.size() == 0) {
+            System.out.println("No book available in our library.");
+        }
         for(Book b: this.books){
             System.out.println(b);
         }
+    }
+
+
+    public void addToWaitingList(User user, String title){
+        this.waitingList.addToWaitingList(user, title);
     }
 
     public User getUserInstance(String id){
@@ -152,7 +162,7 @@ public class Library{
         List<Book> books = new ArrayList<>();
         for(Book b: this.books){
             if(b.getTitle().equalsIgnoreCase(title)){
-
+                books.add(b);
             }
         }
 
@@ -160,6 +170,15 @@ public class Library{
         temp = this.books.toArray(temp);
         return temp;
     }
+
+    public void removeBookRequest(String id){
+        this.waitingList.removeBookRequest(id);
+    }
+
+    public void viewWaitingList(){
+        this.waitingList.viewWaitingList();
+    }
+
 
 //    public Book[] getAllBooks(){
 //        List<Book> availableBooks = new ArrayList<>();
@@ -232,11 +251,30 @@ public class Library{
 //        return returned;
 //    }
 
+    public void viewBorrowingList(){
+        if(this.borrowingList.size() == 0) {
+            System.out.println("No Loaing book.");
+            return ;
+        }
+        System.out.println("\t\t\t\t\tBorrowing List:");
+        for(Book book: borrowingList){
+            System.out.println(book.getTitle() + " : " + book.getBorrower());
+        }
+    }
+
+    public void returnBook(User user, Book... books){
+        for(Book b: books){
+            b.returnBack();
+            this.borrowingList.remove(b);
+        }
+    }
+
     public void borrowBook(User borrower, Book... books){
         ArrayList<History.HistoryDetail> historyDetails = new ArrayList<>();
         for(Book b:books) {
             b.loan(borrower);
             historyDetails.add(new History.HistoryDetail(b));
+            borrowingList.add(b);
         }
         addHistory(borrower, historyDetails);
     }

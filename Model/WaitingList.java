@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WaitingList {
-    private List<BookRequest> bookRequests;
+    private List<BookRequestQueue> bookRequestQueues;
 
     private static WaitingList waitingList ;
     private WaitingList(){
-        bookRequests = new ArrayList<>();
+        bookRequestQueues = new ArrayList<>();
     }
 
     //singleton
@@ -20,36 +20,54 @@ public class WaitingList {
     }
 
     public void addBookRequest(String title, User requestedUser){
-        BookRequest request = getBookRequest(title);
+        BookRequestQueue request = getBookRequest(title);
         if(request == null){
-            request = new BookRequest(title);
-            this.bookRequests.add(request);
+            request = new BookRequestQueue(title);
+            this.bookRequestQueues.add(request);
         }
         request.addRequestedUser(requestedUser);
     }
 
-    private BookRequest getBookRequest(String title){
-        //return BookRequest if the request of current exists else return null;
-        for(BookRequest request: this.bookRequests){
+    private BookRequestQueue getBookRequest(String title){
+        //return BookRequestQueue if the request of current exists else create a empty request;
+        BookRequestQueue queue = null;
+        for(BookRequestQueue request: this.bookRequestQueues){
             if(request.getBookTitle().equalsIgnoreCase(title)){
-                return request;
+                queue = request;
             }
         }
-        return null;
+        if(queue == null){
+            queue = new BookRequestQueue(title);
+            this.bookRequestQueues.add(queue);
+        }
+        return queue;
+
     }
 
     public void viewWaitingList(){
-        if(this.bookRequests.size() == 0) {
+        if(this.bookRequestQueues.size() == 0) {
             System.out.println("No Waiting User");
         }
 
-        for(BookRequest bookRequest : this.bookRequests){
-            System.out.println(bookRequest);
+        for(BookRequestQueue bookRequestQueue : this.bookRequestQueues){
+            System.out.println(bookRequestQueue);
         }
     }
 
     public void addToWaitingList(User user, String title){
-        BookRequest bookRequest = getBookRequest(title);
-        bookRequest.addRequestedUser(user);
+        BookRequestQueue bookRequestQueue = getBookRequest(title);
+        bookRequestQueue.addRequestedUser(user);
+    }
+
+    public void removeBookRequest(String id){
+        for(BookRequestQueue bookRequestQueue : this.bookRequestQueues){
+            if(bookRequestQueue.getId().equalsIgnoreCase(id)){
+                this.removeBookRequest(bookRequestQueue);
+            }
+        }
+    }
+
+    public void removeBookRequest(BookRequestQueue bookRequestQueue){
+        this.bookRequestQueues.remove(bookRequestQueue);
     }
 }

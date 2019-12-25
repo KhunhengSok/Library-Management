@@ -19,7 +19,7 @@ public class Book{
         this.bookId = UUID.randomUUID().toString();
     }
 
-    private void returnBack(){
+    public void returnBack(){
         this.borrowedDate = null;
         this.borrower = null;
         this.loanStatus = false;
