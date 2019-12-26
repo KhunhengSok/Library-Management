@@ -132,7 +132,7 @@ public class Main{
                 case "1": insertBookWithPrompt();break;
                 case "2": removeBookWithPrompt();break;
                 case "3": removeUserRequestWithPrompt();break;
-                case "4": viewAllBooks();break;
+                case "4": viewAllBooksByAdmin();break;
                 case "5": viewWaitingList();break;
                 case "6": viewBorrowingList();break;
                 case "7":  flag = false ; break;
@@ -151,7 +151,7 @@ public class Main{
                 case "1": borrowBooksWithPrompt();break;
                 case "2": searchBookWithPrompt();break;
                 case "3": viewHistory();break;
-                case "4": viewAllBooks();break;
+                case "4": viewAllBooksByUser();break;
                 case "5": flag = false ;break;
                 default: println("Invalid input"); currentLogin = null;  break;
 
@@ -186,11 +186,15 @@ public class Main{
         ((Admin)currentLogin).removeRequest(requestID);
     }
 
-    private static void viewAllBooks() {
+    private static void viewAllBooksByAdmin() {
 //        library.viewAllBook();
         ((Admin)currentLogin).viewAllBook();
     }
 
+    private static void viewAllBooksByUser() {
+//        library.viewAllBook();
+        ((User)currentLogin).viewAllBook();
+    }
 
     private static void viewWaitingList(){
 //        library.viewWaitingList();
@@ -206,6 +210,7 @@ public class Main{
     private static  void borrowBooksWithPrompt(){
         println("Enter a Book ID: ");
         String id = scanner.nextLine();
+        id = id.trim();
         Book book = library.getBookInstance(id);
         if(book != null) {
 //            library.borrowBook((User) currentLogin, book);
@@ -226,15 +231,10 @@ public class Main{
     }
 
     private static void viewHistory(){
-//        library.viewHistory((User)currentLogin);
         ((User)currentLogin).viewHistory();
     }
 
     //======================End functionality===================
-
-
-
-
 
 
     private static void printBooks(Book[] books){

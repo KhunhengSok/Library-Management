@@ -9,7 +9,7 @@ public class Library{
     private List<Admin> admins;
     private ArrayList<Book> books;
     private List<History> borrowedHistory;
-    private List<Book> borrowingList ;
+    private BorrowingList borrowingList;
 
     private WaitingList waitingList;
 
@@ -20,7 +20,7 @@ public class Library{
         this.admins = new ArrayList<>();
         this.borrowedHistory = new ArrayList<>();
         this.waitingList = WaitingList.getInstance();
-        this.borrowingList = new ArrayList<>();
+        this.borrowingList = new BorrowingList();
     }
 
 
@@ -147,8 +147,6 @@ public class Library{
         this.waitingList.viewWaitingList();
     }
 
-
-
     public Book[] getAllBook(){
         ArrayList<Book> books = new ArrayList<>(this.books);
         books.sort(new Comparator<Book>() {
@@ -175,7 +173,8 @@ public class Library{
 
     public int checkBookAvailableAmount(String title){
         //return -1 if the book doesn't exist
-        //return 0 if it's not avaibl
+        //return 0 if it's not avaible
+        //else return the amount of currently availables
         int currentQty = -1 ;
         for(Book b: this.books){
             //check if the book title match and book isn't loan yet.
@@ -190,35 +189,13 @@ public class Library{
         return currentQty;
     }
 
-
-    public void viewBorrowingList(){
-        if(this.borrowingList.size() == 0) {
-            System.out.println("No Loaing book.");
-            return ;
-        }
-        System.out.println("\t\t\t\t\tBorrowing List:");
-        for(Book book: borrowingList){
-            System.out.println("Book: " + book.getTitle());
-            System.out.println("Borrower: " + book.getBorrower());
-            System.out.println("Borrowed Date: " + book.getBookId());
-            System.out.println("Due Date: " + book.getDueDate() +'\n');
-        }
-    }
-
-    public void returnBook(User user, Book... books){
-        for(Book b: books){
-            b.returnBack();
-            this.borrowingList.remove(b);
-        }
-    }
-
     public void borrowBook(User borrower, Book... books){
         ArrayList<History.HistoryDetail> historyDetails = new ArrayList<>();
         if(books == null) return ;
         for(Book b:books) {
             b.loan(borrower);
             historyDetails.add(new History.HistoryDetail(b));
-            borrowingList.add(b);
+            borrowingList.addToBorrowingList(b);
         }
         addHistory(borrower, historyDetails);
     }
