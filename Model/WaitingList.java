@@ -32,7 +32,7 @@ public class WaitingList {
         //return BookRequestQueue if the request of current exists else create a empty request;
         BookRequestQueue queue = null;
         for(BookRequestQueue request: this.bookRequestQueues){
-            if(request.getBookTitle().equalsIgnoreCase(title)){
+            if(request.getBookTitle().equals(title)){
                 queue = request;
             }
         }
@@ -61,7 +61,7 @@ public class WaitingList {
 
     public boolean removeBookRequest(String id){
         for(BookRequestQueue bookRequestQueue : this.bookRequestQueues){
-            if(bookRequestQueue.getId().equalsIgnoreCase(id)){
+            if(bookRequestQueue.getId().equals(id)){
                 this.removeBookRequest(bookRequestQueue);
                 return true;
             }

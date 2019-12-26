@@ -58,7 +58,7 @@ public class Book{
 
     public String getAuthor() {
         return author;
-    }
+    }q
 
     public void setAuthor(String author) {
         this.author = author;

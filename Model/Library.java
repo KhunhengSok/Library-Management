@@ -45,7 +45,7 @@ public class Library{
 
     public boolean removeBookByBookID(String id){
         for(Book b: this.books){
-            if(b.getBookId().equalsIgnoreCase(id)){
+            if(b.getBookId().equals(id)){
                 this.books.remove(b);
                 return true;
             }
@@ -69,7 +69,7 @@ public class Library{
 
     public User getUserInstance(String id){
         for(User u: this.users){
-            if(u.getId().equalsIgnoreCase(id)) return u;
+            if(u.getId().equals(id)) return u;
         }
         return  null;
     }
@@ -83,7 +83,7 @@ public class Library{
     }
     public Admin getAdminInstance(String id){
         for(Admin a: this.admins){
-            if(a.getId().equalsIgnoreCase(id)) return a ;
+            if(a.getId().equals(id)) return a ;
         }
         return null;
     }
@@ -92,7 +92,7 @@ public class Library{
     public Book getBookInstance(String id){
         //return Book instance if it exists else return null
         for(Book b: books){
-            if(b.getBookId().equalsIgnoreCase(id)){
+            if(b.getBookId().equals(id)){
                 return b;
             }
         }
@@ -118,7 +118,7 @@ public class Library{
     private History[] getHistory(User user){
         ArrayList<History> histories = new ArrayList<>();
         for(History h: this.borrowedHistory){
-            if(h.getBorrower().getId().equalsIgnoreCase(user.getId())) {
+            if(h.getBorrower().getId().equals(user.getId())) {
                 histories.add(h);
             }
         }
