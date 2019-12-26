@@ -59,15 +59,17 @@ public class WaitingList {
         bookRequestQueue.addRequestedUser(user);
     }
 
-    public void removeBookRequest(String id){
+    public boolean removeBookRequest(String id){
         for(BookRequestQueue bookRequestQueue : this.bookRequestQueues){
             if(bookRequestQueue.getId().equalsIgnoreCase(id)){
                 this.removeBookRequest(bookRequestQueue);
+                return true;
             }
         }
+        return false;
     }
 
-    public void removeBookRequest(BookRequestQueue bookRequestQueue){
-        this.bookRequestQueues.remove(bookRequestQueue);
+    public boolean removeBookRequest(BookRequestQueue bookRequestQueue){
+        return this.bookRequestQueues.remove(bookRequestQueue);
     }
 }

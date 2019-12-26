@@ -40,13 +40,15 @@ public abstract class Person {
         return id;
     }
 
-    public abstract Book[] search(String title);
+    public abstract Book[] searchBook(String title);
 
-    public abstract  Book[] viewAllBook();
+    public abstract void viewAllBook();
 
     public  int checkBookAvailableStatus(String title){
         Library library = Library.getInstance();
         return library.checkBookAvailableAmount(title);
     }
+
+
 
 }

@@ -4,9 +4,6 @@ import javax.annotation.processing.SupportedSourceVersion;
 import java.util.*;
 
 public class Library{
-    public static int BOOK_REQUEST_GRANTED = 1;
-    public static int BOOK_REQUEST_NOT_AVAILABLE = 2;
-    public static int BOOK_REQUEST_NOT_ENOUGH = 3 ;
 
     private List<User> users;
     private List<Admin> admins;
@@ -19,7 +16,6 @@ public class Library{
     private static Library library = null;
     private Library(){
         this.users = new ArrayList<>();
-//        this.books_qty = new HashMap<>();
         this.books = new ArrayList<>();
         this.admins = new ArrayList<>();
         this.borrowedHistory = new ArrayList<>();
@@ -36,18 +32,6 @@ public class Library{
         return library;
     }
 
-//    public void insertBook(Admin admin, Book book, int qty){
-//        if(qty <= 0) return ;
-//        Integer currentQty = this.books_qty.get(book);
-//        if(currentQty == null){
-//            for(int i = 0 ; i<qty ; i++){
-//                this.books_qty.put(book,qty);
-//            }
-//        }else{
-//            this.books_qty.put(book, currentQty + qty);
-//        }
-//
-//    }
     public WaitingList getWaitingList() {
         return waitingList;
     }
@@ -58,17 +42,6 @@ public class Library{
         }
     }
 
-//    public boolean removeBook(Book book, int qty){
-//        Integer  currentQty = this.books_qty.get((book));
-//        if(currentQty == null){
-//            throw new IllegalArgumentException("The book doesn't exist in our library.");
-//        }else  if(currentQty < qty){
-//            throw new IllegalArgumentException("Remove amount is larger than we currently have." + qty +  " > " + currentQty);
-////            return false ;
-//        }
-//        this.books_qty.put(book, currentQty - qty);
-//        return true ;
-//    }
 
     public boolean removeBookByBookID(String id){
         for(Book b: this.books){
@@ -127,14 +100,6 @@ public class Library{
     }
 
 
-//    public Book searchBook(String title){
-//        for(Book b: this.books_qty.keySet()){
-//            if(b.getTitle().equals(title)){
-//                return b ;
-//            }
-//        }
-//        return null;
-//    }
 
     public void viewHistory(User user){
         History[] history = getHistory(user);
@@ -174,8 +139,8 @@ public class Library{
 
     }
 
-    public void removeBookRequest(String id){
-        this.waitingList.removeBookRequest(id);
+    public boolean removeBookRequest(String id){
+        return this.waitingList.removeBookRequest(id);
     }
 
     public void viewWaitingList(){
@@ -183,16 +148,6 @@ public class Library{
     }
 
 
-//    public Book[] getAllBooks(){
-//        List<Book> availableBooks = new ArrayList<>();
-//        //        Book[] books = Arrays.copyOf(this.books_qty.keySet().toArray(), this.books_qty.size(), Book[].class);
-//        for(Book b : this.books_qty.keySet()){
-//            if(this.books_qty.get(b) != 0){
-//                availableBooks.add(b);
-//            }
-//        }
-//        return (Book[])availableBooks.toArray();
-//    }
 
     public Book[] getAllBook(){
         ArrayList<Book> books = new ArrayList<>(this.books);
@@ -235,24 +190,6 @@ public class Library{
         return currentQty;
     }
 
-//    public int[] borrowBook(String title, int Qty){
-//        //return array of int
-//        //1st: BOOK_REQUEST_STATUS (Check Constant at top)
-//        //2nd: availableAmount
-//        //3rd: requestAmount
-//        int availableAmount = this.checkBookAvailableAmount(title);
-//
-//        int[] returned = new int[3];
-//        returned[1] = availableAmount;
-//        returned[2] = Qty;
-//
-//        if(availableAmount >= Qty){
-//            returned[0] = BOOK_REQUEST_GRANTED;
-//        }else if(availableAmount < Qty ){
-//            returned[0] = BOOK_REQUEST_NOT_ENOUGH;
-//        }
-//        return returned;
-//    }
 
     public void viewBorrowingList(){
         if(this.borrowingList.size() == 0) {

@@ -168,32 +168,38 @@ public class Main{
         print("Enter a book title: ");
         String title = scanner.nextLine();
         Book book = new Book(title);
-        library.insertBook((Admin)currentLogin, book);
+//        library.insertBook((Admin)currentLogin, book);
+        ((Admin)currentLogin).insertBook(book);
     }
 
     private static void removeBookWithPrompt(){
         print("Enter a book id: ");
         String id = scanner.nextLine();
-        library.removeBookByBookID(id);
+//        library.removeBookByBookID(id);
+        ((Admin)currentLogin).removeBook(id);
     }
 
     private static void removeUserRequestWithPrompt(){
         print("Enter request id: ");
         String requestID = scanner.nextLine();
-        library.removeBookRequest(requestID);
+//        library.removeBookRequest(requestID);
+        ((Admin)currentLogin).removeRequest(requestID);
     }
 
     private static void viewAllBooks() {
-        library.viewAllBook();
+//        library.viewAllBook();
+        ((Admin)currentLogin).viewAllBook();
     }
 
 
     private static void viewWaitingList(){
-        library.viewWaitingList();
+//        library.viewWaitingList();
+        ((Admin)currentLogin).viewWaitingList();
     }
 
     private static  void viewBorrowingList(){
-        library.viewBorrowingList();
+//        library.viewBorrowingList();
+        ((Admin)currentLogin).viewWaitingList();
     }
 
     //=========User===========
@@ -201,13 +207,17 @@ public class Main{
         println("Enter a Book ID: ");
         String id = scanner.nextLine();
         Book book = library.getBookInstance(id);
-        if(book != null) library.borrowBook((User) currentLogin, book);
+        if(book != null) {
+//            library.borrowBook((User) currentLogin, book);
+            ((User)currentLogin).borrowBook(book);
+        }
     }
 
     private static void searchBookWithPrompt(){
         print("Enter a title: ");
         String title = scanner.nextLine();
-        Book[] books = library.searchBook(title);
+//        Book[] books = library.searchBook(title);
+        Book[] books = ((User)currentLogin).searchBook(title);
         if(books.length==0){
             println("\"" + title + "\"" + " is not available in our library.");
         }else {
@@ -216,7 +226,8 @@ public class Main{
     }
 
     private static void viewHistory(){
-        library.viewHistory((User)currentLogin);
+//        library.viewHistory((User)currentLogin);
+        ((User)currentLogin).viewHistory();
     }
 
     //======================End functionality===================
