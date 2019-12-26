@@ -21,8 +21,8 @@ public class User extends Person{
     }
 
 
-    public void borrowBook(Book book){
-        library.borrowBook(this ,book);
+    public boolean borrowBook(Book book){
+        return library.borrowBook(this ,book);
     }
 
     @Override

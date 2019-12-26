@@ -107,7 +107,10 @@ public class Library{
             System.out.println(user.getName() + " has no borrowed history.");
         }else{
             for(History h: history){
-                System.out.println(h);
+                System.out.print(h);
+//                System.out.println("User: " + user.getName());
+//                System.out.println("Borrow History: ");
+//                System.out.println(h.get)
             }
         }
     }
@@ -189,15 +192,23 @@ public class Library{
         return currentQty;
     }
 
-    public void borrowBook(User borrower, Book... books){
+    public boolean borrowBook(User borrower, Book... books){
+        boolean isSuccess = true;
         ArrayList<History.HistoryDetail> historyDetails = new ArrayList<>();
-        if(books == null) return ;
+        if(books == null) return false ;
         for(Book b:books) {
+            //check if the book if available for loan
+            if(b.isLoan()){
+                return false ;
+            }
+
             b.loan(borrower);
-            historyDetails.add(new History.HistoryDetail(b));
-            borrowingList.addToBorrowingList(b);
+            boolean returned1 = historyDetails.add(new History.HistoryDetail(b));
+            boolean returned2 = borrowingList.addToBorrowingList(b);
+            isSuccess = returned1 & returned2;
         }
         addHistory(borrower, historyDetails);
+        return isSuccess ;
     }
 
     private void addHistory(User borrower, ArrayList<History.HistoryDetail> details){

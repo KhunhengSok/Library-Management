@@ -96,6 +96,9 @@ class History{
 //            str += "\t" + detail.getBook() + " : " + (detail.getReturnedStatus() ? " Returned." : " Not yet return.");
             str += detail;
         }
+        str += "Borrowed Date: " + this.borrowDate + '\n';
+        str += "Due Date: " + this.dueDate + '\n';
+
         return str;
     }
 

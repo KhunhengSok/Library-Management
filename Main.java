@@ -98,7 +98,7 @@ public class Main{
 
     private static void viewHistoryFromUser(){
         User user = (User)currentLogin;
-        library.viewHistory(user);
+        user.viewHistory();
     }
 
     private static void control(){
@@ -214,7 +214,14 @@ public class Main{
         Book book = library.getBookInstance(id);
         if(book != null) {
 //            library.borrowBook((User) currentLogin, book);
-            ((User)currentLogin).borrowBook(book);
+            boolean isSuccess = ((User)currentLogin).borrowBook(book);
+            if(isSuccess){
+                println("Operation Successful.");
+            }else {
+                println("Operation Error.");
+            }
+        }else{
+            System.out.println("Can not find the book id: " + id);
         }
     }
 

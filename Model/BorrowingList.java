@@ -10,10 +10,13 @@ public class BorrowingList {
         this.borrowingList = new ArrayList<>();
     }
 
-    public void addToBorrowingList(Book... books){
+    public boolean addToBorrowingList(Book... books){
+        boolean isSuccess = true;
         for(Book b: books){
-            this.borrowingList.add(b);
+            isSuccess = this.borrowingList.add(b);
+            if(!isSuccess ) break;
         }
+        return isSuccess;
     }
 
     public Book[] getBorrowingList(){
